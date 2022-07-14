@@ -59,6 +59,11 @@ app.use('/secret', verifyPassword, (req, res)=>{
     res.send('MY SECRET IS: Sometimes I wear headphones in public so I can listen to music')
 })
 
+app.get('/admin', (req, res) =>{
+    throw new AppError('You are not an admin', 403)
+})
+
+
 app.use((req,res)=>{
     res.send('NOT FOUND')
 })

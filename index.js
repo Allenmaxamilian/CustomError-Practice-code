@@ -4,7 +4,7 @@ const app = express();                   // executing express
 const morgan = require('morgan');
                                         // to use middleware in express.js, use the app.use() method and input the middleware as defined in the NPM docs
                                         // Middleware is used as code that can be run before any of the route handlers execute such as Authentication
-//const AppError = require('./AppError')
+const AppError = require('./AppError')
 
 app.use(morgan('tiny'))                    // Whatever is input into the app.use() method, Express will run it for every single request. IN this case we are using the middleware 'morgan('tiny')' and this will be used/executed for every request.
 // app.use((req, res, next)=>{
@@ -30,8 +30,8 @@ const verifyPassword = (req, res, next) => {
     if (password === 'chickennugget'){
         next(); 
     }
-    res.status(401)                                       // creating a status code when password is not received
-    throw new Error('password required')
+     throw new AppError('password required', 401);                                 
+    // throw new AppError(401,'password required', 400)
 }
 
 
@@ -65,7 +65,8 @@ app.use((req,res)=>{
 
 // ERROR handling must be put at the bottom of the file
 app.use((err,req,res,next) =>{
-    const {status} = err;
+    const {status = 500} = err;
+    const {message = 'SOmething went wrong'} = err;
     res.status(status).send('ERRORRR!!!')
 })
 
